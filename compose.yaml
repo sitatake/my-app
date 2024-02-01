@@ -1,0 +1,12 @@
+services:
+  app:
+    hostname: frontend
+    build:
+      context: .
+    tty: true
+    environment:
+      - WATCHPACK_POLLING=true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
