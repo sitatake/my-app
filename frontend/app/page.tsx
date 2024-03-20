@@ -2,28 +2,15 @@
 
 import AddTask from "./components/AddTask";
 import TodoList, { todotype } from "./components/TodoList";
-import { useState } from "react";
-
-const todosDefault: todotype[] = [
-  {
-    id: 1,
-    text: "プログラミング",
-    finish: false,
-  },
-  {
-    id: 2,
-    text: "プログラミング",
-    finish: false,
-  },
-  {
-    id: 3,
-    text: "プログラミング",
-    finish: false,
-  },
-];
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Home() {
-  const [todos, setTodos] = useState<todotype[]>(todosDefault);
+  const [todos, setTodos] = useState<todotype[]>([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/todo/").then(({ data }) => setTodos(data));
+  }, []);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-200">

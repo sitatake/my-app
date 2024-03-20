@@ -1,8 +1,9 @@
+version: '3'
 services:
   frontend:
     hostname: frontend
     build:
-      context: .
+      context: ./frontend
     tty: true
     environment:
       - WATCHPACK_POLLING=true
@@ -10,3 +11,30 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
+
+  backend:
+    hostname: backend
+    build:
+      context: ./backend
+    tty: true
+    # environment:
+    #   - WATCHPACK_POLLING=true
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/.dockervenv:/src/.venv
+      - ./backend:/src
+
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres_data:

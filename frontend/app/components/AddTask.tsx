@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Props, todotype } from "./TodoList";
+import { Props, createtodotype } from "./TodoList";
+import axios from "axios";
 
 const AddTask = ({ todolist, setTodos }: Props) => {
   const [text, setText] = useState("");
-  const newTodo: todotype = {
-    id: todolist.length + 1,
+  const newTodo: createtodotype = {
     text: text,
-    finish: false,
+    done: false,
   };
   const handleAddButton = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setTodos([newTodo, ...todolist]);
+    axios
+      .post("http://localhost:8000/todo/", newTodo)
+      .then((res) => setTodos([res.data, ...todolist]));
     setText("");
   };
 

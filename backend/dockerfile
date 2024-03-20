@@ -1,0 +1,18 @@
+# python3.9のイメージをダウンロード
+FROM python:3.12.2-bookworm
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /src/
+
+# poetryの定義ファイルをコピー (存在する場合)
+# COPY pyproject.toml* poetry.lock* ./
+
+# pipを使ってpoetryをインストール
+RUN pip install poetry
+
+# poetryでライブラリをインストール (pyproject.tomlが既にある場合)
+RUN poetry config virtualenvs.in-project true
+RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
+
+# uvicornのサーバーを立ち上げる
+ENTRYPOINT ["poetry", "run", "uvicorn", "apps.main:app", "--host", "0.0.0.0", "--reload"]
